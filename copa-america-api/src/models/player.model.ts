@@ -75,10 +75,6 @@ export class Player extends Entity {
   })
   isCoach: boolean;
 
-  @property({
-    type: 'number',
-  })
-  teamId?: number;
 
   constructor(data?: Partial<Player>) {
     super(data);
