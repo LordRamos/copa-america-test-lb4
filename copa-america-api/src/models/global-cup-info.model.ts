@@ -1,13 +1,14 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class Tournament extends Entity {
+export class GlobalCupInfo extends Entity {
   @property({
     type: 'number',
     id: true,
-    generated: true,
+    generated: false,
+    required: true,
   })
-  id?: number;
+  id: number;
 
   @property({
     type: 'string',
@@ -33,14 +34,20 @@ export class Tournament extends Entity {
   })
   endDate: string;
 
+  @property({
+    type: 'string',
+    required: true,
+  })
+  organizerName: string;
 
-  constructor(data?: Partial<Tournament>) {
+
+  constructor(data?: Partial<GlobalCupInfo>) {
     super(data);
   }
 }
 
-export interface TournamentRelations {
+export interface GlobalCupInfoRelations {
   // describe navigational properties here
 }
 
-export type TournamentWithRelations = Tournament & TournamentRelations;
+export type GlobalCupInfoWithRelations = GlobalCupInfo & GlobalCupInfoRelations;

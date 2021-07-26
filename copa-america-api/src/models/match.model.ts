@@ -33,6 +33,16 @@ export class Match extends Entity {
   @belongsTo(() => Stadium)
   stadiumId: number;
 
+  @property({
+    type: 'number',
+  })
+  homeTeamId?: number;
+
+  @property({
+    type: 'number',
+  })
+  awayTeamId?: number;
+
   constructor(data?: Partial<Match>) {
     super(data);
   }

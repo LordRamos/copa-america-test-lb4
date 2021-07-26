@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
+import {Team} from './team.model';
 
 @model()
 export class Group extends Entity {
@@ -15,6 +16,8 @@ export class Group extends Entity {
   })
   name: string;
 
+  @hasMany(() => Team)
+  teams: Team[];
 
   constructor(data?: Partial<Group>) {
     super(data);

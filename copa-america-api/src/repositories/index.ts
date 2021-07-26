@@ -9,3 +9,6 @@ export * from './referee.repository';
 export * from './stadium.repository';
 export * from './stage.repository';
 export * from './tournament.repository';
+export * from './global-cup-info.repository';
+export * from './host-country.repository';
+export * from './team.repository';
