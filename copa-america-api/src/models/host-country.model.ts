@@ -1,6 +1,17 @@
 import {Entity, model, property} from '@loopback/repository';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_hc_countryId: {
+        name: 'fk_hc_countryId',
+        entity: 'Country',
+        entityKey: 'id',
+        foreignKey: 'countryId',
+      }
+    }
+  }
+})
 export class HostCountry extends Entity {
   @property({
     type: 'number',

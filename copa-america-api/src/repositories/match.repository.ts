@@ -1,10 +1,11 @@
-import {Getter, inject} from '@loopback/core';
-import {BelongsToAccessor, DefaultCrudRepository, repository} from '@loopback/repository';
-import {Ca2021DataSource} from '../datasources';
-import {Match, MatchRelations, Referee, Stadium, Stage} from '../models';
-import {RefereeRepository} from './referee.repository';
-import {StadiumRepository} from './stadium.repository';
+import {inject, Getter} from '@loopback/core';
+import {DefaultCrudRepository, repository, BelongsToAccessor, HasOneRepositoryFactory, HasManyRepositoryFactory} from '@loopback/repository';
+import {DbDataSource} from '../datasources';
+import {Match, MatchRelations, Stage, Referee, MatchResults, LineUp} from '../models';
 import {StageRepository} from './stage.repository';
+import {RefereeRepository} from './referee.repository';
+import {MatchResultsRepository} from './match-results.repository';
+import {LineUpRepository} from './line-up.repository';
 
 export class MatchRepository extends DefaultCrudRepository<
   Match,
@@ -12,19 +13,21 @@ export class MatchRepository extends DefaultCrudRepository<
   MatchRelations
 > {
 
-  public readonly referee: BelongsToAccessor<Referee, typeof Match.prototype.id>;
-
   public readonly stage: BelongsToAccessor<Stage, typeof Match.prototype.id>;
 
-  public readonly stadium: BelongsToAccessor<Stadium, typeof Match.prototype.id>;
+  public readonly referee: BelongsToAccessor<Referee, typeof Match.prototype.id>;
 
+  public readonly matchResults: HasOneRepositoryFactory<MatchResults, typeof Match.prototype.id>;
+
+  public readonly lineUps: HasManyRepositoryFactory<LineUp, typeof Match.prototype.id>;
 
   constructor(
-    @inject('datasources.ca2021') dataSource: Ca2021DataSource, @repository.getter('RefereeRepository') protected refereeRepositoryGetter: Getter<RefereeRepository>, @repository.getter('StageRepository') protected stageRepositoryGetter: Getter<StageRepository>, @repository.getter('StadiumRepository') protected stadiumRepositoryGetter: Getter<StadiumRepository>,
+    @inject('datasources.db') dataSource: DbDataSource, @repository.getter('StageRepository') protected stageRepositoryGetter: Getter<StageRepository>, @repository.getter('RefereeRepository') protected refereeRepositoryGetter: Getter<RefereeRepository>, @repository.getter('MatchResultsRepository') protected matchResultsRepositoryGetter: Getter<MatchResultsRepository>, @repository.getter('LineUpRepository') protected lineUpRepositoryGetter: Getter<LineUpRepository>,
   ) {
     super(Match, dataSource);
-    this.stadium = this.createBelongsToAccessorFor('stadium', stadiumRepositoryGetter,);
-    this.stage = this.createBelongsToAccessorFor('stage', stageRepositoryGetter,);
+    this.lineUps = this.createHasManyRepositoryFactoryFor('lineUps', lineUpRepositoryGetter,);
+    this.matchResults = this.createHasOneRepositoryFactoryFor('matchResults', matchResultsRepositoryGetter);
     this.referee = this.createBelongsToAccessorFor('referee', refereeRepositoryGetter,);
+    this.stage = this.createBelongsToAccessorFor('stage', stageRepositoryGetter,);
   }
 }

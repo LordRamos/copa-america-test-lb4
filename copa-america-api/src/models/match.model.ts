@@ -1,7 +1,8 @@
-import {belongsTo, Entity, model, property} from '@loopback/repository';
-import {Referee} from './referee.model';
-import {Stadium} from './stadium.model';
+import {Entity, model, property, belongsTo, hasOne, hasMany} from '@loopback/repository';
 import {Stage} from './stage.model';
+import {Referee} from './referee.model';
+import {MatchResults} from './match-results.model';
+import {LineUp} from './line-up.model';
 
 @model()
 export class Match extends Entity {
@@ -24,15 +25,17 @@ export class Match extends Entity {
   })
   matchNumber: number;
 
-  @belongsTo(() => Referee)
-  refereeId: number;
-
   @belongsTo(() => Stage)
   stageId: number;
 
-  @belongsTo(() => Stadium)
-  stadiumId: number;
+  @belongsTo(() => Referee)
+  refereeId: number;
 
+  @hasOne(() => MatchResults)
+  matchResults: MatchResults;
+
+  @hasMany(() => LineUp)
+  lineUps: LineUp[];
 
   constructor(data?: Partial<Match>) {
     super(data);

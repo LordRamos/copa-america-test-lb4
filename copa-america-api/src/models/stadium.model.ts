@@ -1,8 +1,19 @@
-import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
+import {belongsTo, Entity, hasOne, model, property} from '@loopback/repository';
 import {City} from './city.model';
-import {Match} from './match.model';
+import {Club} from './club.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_s_cityId: {
+        name: 'fk_s_cityId',
+        entity: 'City',
+        entityKey: 'id',
+        foreignKey: 'cityId',
+      }
+    }
+  }
+})
 export class Stadium extends Entity {
   @property({
     type: 'number',
@@ -17,11 +28,11 @@ export class Stadium extends Entity {
   })
   name: string;
 
+  @hasOne(() => Club)
+  club: Club;
+
   @belongsTo(() => City)
   cityId: number;
-
-  @hasMany(() => Match)
-  matches: Match[];
 
   constructor(data?: Partial<Stadium>) {
     super(data);

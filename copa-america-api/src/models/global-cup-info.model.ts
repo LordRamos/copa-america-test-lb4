@@ -5,10 +5,9 @@ export class GlobalCupInfo extends Entity {
   @property({
     type: 'number',
     id: true,
-    generated: false,
-    required: true,
+    generated: true,
   })
-  id: number;
+  id?: number;
 
   @property({
     type: 'string',

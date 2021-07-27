@@ -1,6 +1,9 @@
-import {Entity, hasMany, hasOne, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany, hasOne} from '@loopback/repository';
 import {City} from './city.model';
+import {Referee} from './referee.model';
 import {HostCountry} from './host-country.model';
+import {Team} from './team.model';
+import {Player} from './player.model';
 
 @model()
 export class Country extends Entity {
@@ -20,10 +23,17 @@ export class Country extends Entity {
   @hasMany(() => City)
   cities: City[];
 
+  @hasMany(() => Referee)
+  referees: Referee[];
+
   @hasOne(() => HostCountry)
   hostCountry: HostCountry;
 
+  @hasOne(() => Team)
+  team: Team;
 
+  @hasMany(() => Player, {keyTo: 'nationalityId'})
+  players: Player[];
 
   constructor(data?: Partial<Country>) {
     super(data);

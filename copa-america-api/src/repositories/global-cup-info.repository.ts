@@ -1,6 +1,6 @@
 import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
-import {Ca2021DataSource} from '../datasources';
+import {DbDataSource} from '../datasources';
 import {GlobalCupInfo, GlobalCupInfoRelations} from '../models';
 
 export class GlobalCupInfoRepository extends DefaultCrudRepository<
@@ -9,7 +9,7 @@ export class GlobalCupInfoRepository extends DefaultCrudRepository<
   GlobalCupInfoRelations
 > {
   constructor(
-    @inject('datasources.ca2021') dataSource: Ca2021DataSource,
+    @inject('datasources.db') dataSource: DbDataSource,
   ) {
     super(GlobalCupInfo, dataSource);
   }

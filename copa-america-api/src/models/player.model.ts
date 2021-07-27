@@ -1,6 +1,38 @@
-import {Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
+import {Club} from './club.model';
+import {Country} from './country.model';
+import {LineUpPlayer} from './line-up-player.model';
+import {PlayerPosition} from './player-position.model';
+import {Team} from './team.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_p_nationalityId: {
+        name: 'fk_p_nationalityId',
+        entity: 'Country',
+        entityKey: 'id',
+        foreignKey: 'nationalityId',
+      }, fk_p_playerPositionId: {
+        name: 'fk_p_playerPositionId',
+        entity: 'PlayerPosition',
+        entityKey: 'id',
+        foreignKey: 'playerPositionId',
+      }, fk_p_teamId: {
+        name: 'fk_p_teamId',
+        entity: 'Team',
+        entityKey: 'id',
+        foreignKey: 'teamId',
+      },
+      fk_p_clubId: {
+        name: 'fk_p_clubId',
+        entity: 'Club',
+        entityKey: 'id',
+        foreignKey: 'clubId',
+      }
+    }
+  }
+})
 export class Player extends Entity {
   @property({
     type: 'number',
@@ -75,6 +107,27 @@ export class Player extends Entity {
   })
   isCoach: boolean;
 
+  @property({
+    type: 'boolean',
+    required: true,
+  })
+  isOnFinalList: boolean;
+
+
+  @belongsTo(() => Country)
+  nationalityId: number;
+
+  @belongsTo(() => PlayerPosition)
+  playerPositionId: number;
+
+  @belongsTo(() => Team)
+  teamId: number;
+
+  @belongsTo(() => Club)
+  clubId: number;
+
+  @hasMany(() => LineUpPlayer)
+  lineUpPlayers: LineUpPlayer[];
 
   constructor(data?: Partial<Player>) {
     super(data);
