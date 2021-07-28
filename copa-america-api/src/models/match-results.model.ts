@@ -1,6 +1,17 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_mr_matchId: {
+        name: 'fk_mr_matchId',
+        entity: 'Match',
+        entityKey: 'id',
+        foreignKey: 'matchId',
+      }
+    }
+  }
+})
 export class MatchResults extends Entity {
   @property({
     type: 'number',
@@ -23,6 +34,7 @@ export class MatchResults extends Entity {
 
   @property({
     type: 'number',
+    index: { "unique": true }
   })
   matchId?: number;
 

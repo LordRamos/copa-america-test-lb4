@@ -1,7 +1,19 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
-import {Team} from './team.model';
+import { Entity, model, property, hasMany, belongsTo } from '@loopback/repository';
+import { Team } from './team.model';
+import { GlobalCupInfo } from './global-cup-info.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_g_globalCupInfoId: {
+        name: 'fk_g_globalCupInfoId',
+        entity: 'GlobalCupInfo',
+        entityKey: 'id',
+        foreignKey: 'globalCupInfoId',
+      }
+    }
+  }
+})
 export class Group extends Entity {
   @property({
     type: 'number',
@@ -18,6 +30,9 @@ export class Group extends Entity {
 
   @hasMany(() => Team)
   teams: Team[];
+
+  @belongsTo(() => GlobalCupInfo)
+  globalCupInfoId: number;
 
   constructor(data?: Partial<Group>) {
     super(data);

@@ -20,7 +20,7 @@ import {
 import {LineUp} from '../models';
 import {LineUpRepository} from '../repositories';
 
-export class LineUpControllerController {
+export class LineUpController {
   constructor(
     @repository(LineUpRepository)
     public lineUpRepository : LineUpRepository,

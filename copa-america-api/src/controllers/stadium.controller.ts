@@ -20,7 +20,7 @@ import {
 import {Stadium} from '../models';
 import {StadiumRepository} from '../repositories';
 
-export class StadiumControllerController {
+export class StadiumController {
   constructor(
     @repository(StadiumRepository)
     public stadiumRepository : StadiumRepository,

@@ -20,7 +20,7 @@ import {
 import {Group} from '../models';
 import {GroupRepository} from '../repositories';
 
-export class GroupControllerController {
+export class GroupController {
   constructor(
     @repository(GroupRepository)
     public groupRepository : GroupRepository,

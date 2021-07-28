@@ -20,7 +20,7 @@ import {
 import {Player} from '../models';
 import {PlayerRepository} from '../repositories';
 
-export class PlayerControllerController {
+export class PlayerController {
   constructor(
     @repository(PlayerRepository)
     public playerRepository : PlayerRepository,

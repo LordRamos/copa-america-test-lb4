@@ -1,7 +1,9 @@
-import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
-import {Group} from './group.model';
-import {LineUp} from './line-up.model';
-import {Player} from './player.model';
+import { belongsTo, Entity, hasMany, model, property } from '@loopback/repository';
+import { Group } from './group.model';
+import { LineUp } from './line-up.model';
+import { Player } from './player.model';
+import { Match } from './match.model';
+import {Country} from './country.model';
 
 @model({
   settings: {
@@ -11,6 +13,12 @@ import {Player} from './player.model';
         entity: 'Country',
         entityKey: 'id',
         foreignKey: 'countryId',
+      },
+      fk_t_groupId: {
+        name: 'fk_t_groupId',
+        entity: 'Group',
+        entityKey: 'id',
+        foreignKey: 'groupId',
       }
     }
   }
@@ -27,12 +35,6 @@ export class Team extends Entity {
     type: 'string',
   })
   nickname?: string;
-
-  @property({
-    type: 'number',
-  })
-  countryId?: number;
-
   @belongsTo(() => Group)
   groupId: number;
 
@@ -41,6 +43,15 @@ export class Team extends Entity {
 
   @hasMany(() => LineUp)
   lineUps: LineUp[];
+
+  @hasMany(() => Match, {keyTo: 'homeTeamId'})
+  homeMatches: Match[];
+
+  @hasMany(() => Match, {keyTo: 'awayTeamId'})
+  awayMatches: Match[];
+
+  @belongsTo(() => Country)
+  countryId: number;
 
   constructor(data?: Partial<Team>) {
     super(data);

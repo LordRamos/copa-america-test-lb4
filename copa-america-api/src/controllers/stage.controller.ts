@@ -20,7 +20,7 @@ import {
 import {Stage} from '../models';
 import {StageRepository} from '../repositories';
 
-export class StageControllerController {
+export class StageController {
   constructor(
     @repository(StageRepository)
     public stageRepository : StageRepository,

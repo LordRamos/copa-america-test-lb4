@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property, hasMany} from '@loopback/repository';
+import {HostCountry} from './host-country.model';
+import {Group} from './group.model';
 
 @model()
 export class GlobalCupInfo extends Entity {
@@ -38,7 +40,13 @@ export class GlobalCupInfo extends Entity {
     required: true,
   })
   organizerName: string;
+  test?: string;
 
+  @hasMany(() => HostCountry)
+  hostCountries: HostCountry[];
+
+  @hasMany(() => Group)
+  groups: Group[];
 
   constructor(data?: Partial<GlobalCupInfo>) {
     super(data);

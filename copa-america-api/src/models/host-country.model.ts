@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property, belongsTo } from '@loopback/repository';
+import { GlobalCupInfo } from './global-cup-info.model';
+import {Country} from './country.model';
 
 @model({
   settings: {
@@ -8,6 +10,11 @@ import {Entity, model, property} from '@loopback/repository';
         entity: 'Country',
         entityKey: 'id',
         foreignKey: 'countryId',
+      }, fk_hc_globalCupInfoId: {
+        name: 'fk_hc_globalCupInfoId',
+        entity: 'GlobalCupInfo',
+        entityKey: 'id',
+        foreignKey: 'globalCupInfoId',
       }
     }
   }
@@ -19,11 +26,11 @@ export class HostCountry extends Entity {
     generated: true,
   })
   id?: number;
+  @belongsTo(() => GlobalCupInfo)
+  globalCupInfoId: number;
 
-  @property({
-    type: 'number',
-  })
-  countryId?: number;
+  @belongsTo(() => Country)
+  countryId: number;
 
   constructor(data?: Partial<HostCountry>) {
     super(data);
