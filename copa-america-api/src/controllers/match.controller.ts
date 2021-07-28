@@ -17,19 +17,19 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {Match} from '../models';
-import {MatchRepository} from '../repositories';
+import { Match } from '../models';
+import { MatchRepository } from '../repositories';
 
 export class MatchController {
   constructor(
     @repository(MatchRepository)
-    public matchRepository : MatchRepository,
-  ) {}
+    public matchRepository: MatchRepository,
+  ) { }
 
   @post('/matches')
   @response(200, {
     description: 'Match model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Match)}},
+    content: { 'application/json': { schema: getModelSchemaRef(Match) } },
   })
   async create(
     @requestBody({
@@ -50,7 +50,7 @@ export class MatchController {
   @get('/matches/count')
   @response(200, {
     description: 'Match model count',
-    content: {'application/json': {schema: CountSchema}},
+    content: { 'application/json': { schema: CountSchema } },
   })
   async count(
     @param.where(Match) where?: Where<Match>,
@@ -65,7 +65,7 @@ export class MatchController {
       'application/json': {
         schema: {
           type: 'array',
-          items: getModelSchemaRef(Match, {includeRelations: true}),
+          items: getModelSchemaRef(Match, { includeRelations: true }),
         },
       },
     },
@@ -79,13 +79,13 @@ export class MatchController {
   @patch('/matches')
   @response(200, {
     description: 'Match PATCH success count',
-    content: {'application/json': {schema: CountSchema}},
+    content: { 'application/json': { schema: CountSchema } },
   })
   async updateAll(
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Match, {partial: true}),
+          schema: getModelSchemaRef(Match, { partial: true }),
         },
       },
     })
@@ -100,17 +100,33 @@ export class MatchController {
     description: 'Match model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(Match, {includeRelations: true}),
+        schema: getModelSchemaRef(Match, { includeRelations: true }),
       },
     },
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.filter(Match, {exclude: 'where'}) filter?: FilterExcludingWhere<Match>
+    @param.filter(Match, { exclude: 'where' }) filter?: FilterExcludingWhere<Match>
   ): Promise<Match> {
     return this.matchRepository.findById(id, filter);
   }
 
+  // find by march number
+  @get('/matches/{matchNumber}/byMatchNumber')
+  @response(200, {
+    description: 'Match model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(Match, { includeRelations: true }),
+      },
+    },
+  })
+  async findByMatchNumber(
+    @param.path.number('matchNumber') matchNumber: number,
+    @param.filter(Match, { exclude: 'where' }) filter?: FilterExcludingWhere<Match>
+  ): Promise<Match | null> {
+    return this.matchRepository.findByMatchNumber(matchNumber);
+  }
   @patch('/matches/{id}')
   @response(204, {
     description: 'Match PATCH success',
@@ -120,7 +136,7 @@ export class MatchController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Match, {partial: true}),
+          schema: getModelSchemaRef(Match, { partial: true }),
         },
       },
     })

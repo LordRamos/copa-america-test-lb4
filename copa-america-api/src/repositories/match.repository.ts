@@ -1,13 +1,13 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor, HasOneRepositoryFactory, HasManyRepositoryFactory} from '@loopback/repository';
-import {DbDataSource} from '../datasources';
-import {Match, MatchRelations, Stage, Referee, MatchResults, LineUp, Team, Stadium} from '../models';
-import {StageRepository} from './stage.repository';
-import {RefereeRepository} from './referee.repository';
-import {MatchResultsRepository} from './match-results.repository';
-import {LineUpRepository} from './line-up.repository';
-import {TeamRepository} from './team.repository';
-import {StadiumRepository} from './stadium.repository';
+import { inject, Getter } from '@loopback/core';
+import { DefaultCrudRepository, repository, BelongsToAccessor, HasOneRepositoryFactory, HasManyRepositoryFactory } from '@loopback/repository';
+import { DbDataSource } from '../datasources';
+import { Match, MatchRelations, Stage, Referee, MatchResults, LineUp, Team, Stadium } from '../models';
+import { StageRepository } from './stage.repository';
+import { RefereeRepository } from './referee.repository';
+import { MatchResultsRepository } from './match-results.repository';
+import { LineUpRepository } from './line-up.repository';
+import { TeamRepository } from './team.repository';
+import { StadiumRepository } from './stadium.repository';
 
 export class MatchRepository extends DefaultCrudRepository<
   Match,
@@ -34,11 +34,26 @@ export class MatchRepository extends DefaultCrudRepository<
   ) {
     super(Match, dataSource);
     this.stadium = this.createBelongsToAccessorFor('stadium', stadiumRepositoryGetter,);
+
+
+
+
     this.awayTeam = this.createBelongsToAccessorFor('awayTeam', teamRepositoryGetter,);
     this.homeTeam = this.createBelongsToAccessorFor('homeTeam', teamRepositoryGetter,);
     this.lineUps = this.createHasManyRepositoryFactoryFor('lineUps', lineUpRepositoryGetter,);
     this.matchResults = this.createHasOneRepositoryFactoryFor('matchResults', matchResultsRepositoryGetter);
     this.referee = this.createBelongsToAccessorFor('referee', refereeRepositoryGetter,);
     this.stage = this.createBelongsToAccessorFor('stage', stageRepositoryGetter,);
+    this.registerInclusionResolver('stadium', this.stadium.inclusionResolver);
+    this.registerInclusionResolver('homeTeam', this.homeTeam.inclusionResolver);
+    this.registerInclusionResolver('awayTeam', this.awayTeam.inclusionResolver);
+    this.registerInclusionResolver('referee', this.referee.inclusionResolver);
+    this.registerInclusionResolver('stage', this.stage.inclusionResolver);
+
+
+  }
+  public findByMatchNumber(matchNumber: number) {
+    return this.findOne({ where: { matchNumber: matchNumber }, include: ['stadium', 'stage', 'homeTeam', 'awayTeam', 'referee'] })
+
   }
 }

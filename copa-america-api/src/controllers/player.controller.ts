@@ -17,19 +17,19 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {Player} from '../models';
-import {PlayerRepository} from '../repositories';
+import { Player } from '../models';
+import { PlayerRepository } from '../repositories';
 
 export class PlayerController {
   constructor(
     @repository(PlayerRepository)
-    public playerRepository : PlayerRepository,
-  ) {}
+    public playerRepository: PlayerRepository,
+  ) { }
 
   @post('/players')
   @response(200, {
     description: 'Player model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Player)}},
+    content: { 'application/json': { schema: getModelSchemaRef(Player) } },
   })
   async create(
     @requestBody({
@@ -50,13 +50,16 @@ export class PlayerController {
   @get('/players/count')
   @response(200, {
     description: 'Player model count',
-    content: {'application/json': {schema: CountSchema}},
+    content: { 'application/json': { schema: CountSchema } },
   })
   async count(
     @param.where(Player) where?: Where<Player>,
   ): Promise<Count> {
     return this.playerRepository.count(where);
   }
+
+
+
 
   @get('/players')
   @response(200, {
@@ -65,7 +68,7 @@ export class PlayerController {
       'application/json': {
         schema: {
           type: 'array',
-          items: getModelSchemaRef(Player, {includeRelations: true}),
+          items: getModelSchemaRef(Player, { includeRelations: true }),
         },
       },
     },
@@ -79,13 +82,13 @@ export class PlayerController {
   @patch('/players')
   @response(200, {
     description: 'Player PATCH success count',
-    content: {'application/json': {schema: CountSchema}},
+    content: { 'application/json': { schema: CountSchema } },
   })
   async updateAll(
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Player, {partial: true}),
+          schema: getModelSchemaRef(Player, { partial: true }),
         },
       },
     })
@@ -100,13 +103,13 @@ export class PlayerController {
     description: 'Player model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(Player, {includeRelations: true}),
+        schema: getModelSchemaRef(Player, { includeRelations: true }),
       },
     },
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.filter(Player, {exclude: 'where'}) filter?: FilterExcludingWhere<Player>
+    @param.filter(Player, { exclude: 'where' }) filter?: FilterExcludingWhere<Player>
   ): Promise<Player> {
     return this.playerRepository.findById(id, filter);
   }
@@ -120,7 +123,7 @@ export class PlayerController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Player, {partial: true}),
+          schema: getModelSchemaRef(Player, { partial: true }),
         },
       },
     })

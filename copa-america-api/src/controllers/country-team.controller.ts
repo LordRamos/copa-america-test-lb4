@@ -17,94 +17,40 @@ import {
 } from '@loopback/rest';
 import {
   Country,
+  Player,
   Team,
 } from '../models';
-import {CountryRepository} from '../repositories';
+import { CountryRepository, PlayerRepository } from '../repositories';
 
 export class CountryTeamController {
   constructor(
     @repository(CountryRepository) protected countryRepository: CountryRepository,
+    @repository(PlayerRepository) protected playerRepository: PlayerRepository,
   ) { }
-
-  @get('/countries/{id}/team', {
+  // Countryname
+  @get('/countries/{countryName}/team-players', {
     responses: {
       '200': {
         description: 'Country has one Team',
         content: {
           'application/json': {
-            schema: getModelSchemaRef(Team),
+            schema: getModelSchemaRef(Player),
           },
         },
       },
     },
   })
   async get(
-    @param.path.number('id') id: number,
+    @param.path.password('countryName') countryName: string,
     @param.query.object('filter') filter?: Filter<Team>,
-  ): Promise<Team> {
-    return this.countryRepository.team(id).get(filter);
-  }
+  ): Promise<Player[]> {
+    let country = await this.countryRepository.findOne({
+      where: { name: countryName },
+      include: ['team']
 
-  @post('/countries/{id}/team', {
-    responses: {
-      '200': {
-        description: 'Country model instance',
-        content: {'application/json': {schema: getModelSchemaRef(Team)}},
-      },
-    },
-  })
-  async create(
-    @param.path.number('id') id: typeof Country.prototype.id,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Team, {
-            title: 'NewTeamInCountry',
-            exclude: ['id'],
-            optional: ['countryId']
-          }),
-        },
-      },
-    }) team: Omit<Team, 'id'>,
-  ): Promise<Team> {
-    return this.countryRepository.team(id).create(team);
-  }
-
-  @patch('/countries/{id}/team', {
-    responses: {
-      '200': {
-        description: 'Country.Team PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async patch(
-    @param.path.number('id') id: number,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Team, {partial: true}),
-        },
-      },
     })
-    team: Partial<Team>,
-    @param.query.object('where', getWhereSchemaFor(Team)) where?: Where<Team>,
-  ): Promise<Count> {
-    return this.countryRepository.team(id).patch(team, where);
+
+    return this.playerRepository.find({ where: { teamId: country?.team.id }, include: ['playerPosition'], fields: ['id', 'lastName', 'shirtNumber', 'playerPositionId', 'isCoach'] })
   }
 
-  @del('/countries/{id}/team', {
-    responses: {
-      '200': {
-        description: 'Country.Team DELETE success count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async delete(
-    @param.path.number('id') id: number,
-    @param.query.object('where', getWhereSchemaFor(Team)) where?: Where<Team>,
-  ): Promise<Count> {
-    return this.countryRepository.team(id).delete(where);
-  }
 }

@@ -37,6 +37,8 @@ export class TeamRepository extends DefaultCrudRepository<
     this.homeMatches = this.createHasManyRepositoryFactoryFor('homeMatches', matchRepositoryGetter,);
     this.lineUps = this.createHasManyRepositoryFactoryFor('lineUps', lineUpRepositoryGetter,);
     this.players = this.createHasManyRepositoryFactoryFor('players', playerRepositoryGetter,);
+    this.registerInclusionResolver('players', this.players.inclusionResolver);
+
     this.group = this.createBelongsToAccessorFor('group', groupRepositoryGetter,);
   }
 }

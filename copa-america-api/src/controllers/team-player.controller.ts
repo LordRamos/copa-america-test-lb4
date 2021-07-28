@@ -19,7 +19,7 @@ import {
   Team,
   Player,
 } from '../models';
-import {TeamRepository} from '../repositories';
+import { TeamRepository } from '../repositories';
 
 export class TeamPlayerController {
   constructor(
@@ -32,7 +32,7 @@ export class TeamPlayerController {
         description: 'Array of Team has many Player',
         content: {
           'application/json': {
-            schema: {type: 'array', items: getModelSchemaRef(Player)},
+            schema: { type: 'array', items: getModelSchemaRef(Player) },
           },
         },
       },
@@ -49,7 +49,7 @@ export class TeamPlayerController {
     responses: {
       '200': {
         description: 'Team model instance',
-        content: {'application/json': {schema: getModelSchemaRef(Player)}},
+        content: { 'application/json': { schema: getModelSchemaRef(Player) } },
       },
     },
   })
@@ -74,7 +74,7 @@ export class TeamPlayerController {
     responses: {
       '200': {
         description: 'Team.Player PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
+        content: { 'application/json': { schema: CountSchema } },
       },
     },
   })
@@ -83,7 +83,7 @@ export class TeamPlayerController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Player, {partial: true}),
+          schema: getModelSchemaRef(Player, { partial: true }),
         },
       },
     })
@@ -97,7 +97,7 @@ export class TeamPlayerController {
     responses: {
       '200': {
         description: 'Team.Player DELETE success count',
-        content: {'application/json': {schema: CountSchema}},
+        content: { 'application/json': { schema: CountSchema } },
       },
     },
   })

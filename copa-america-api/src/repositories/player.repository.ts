@@ -1,12 +1,12 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor, HasManyRepositoryFactory} from '@loopback/repository';
-import {DbDataSource} from '../datasources';
-import {Player, PlayerRelations, Country, PlayerPosition, Team, Club, LineUpPlayer} from '../models';
-import {CountryRepository} from './country.repository';
-import {PlayerPositionRepository} from './player-position.repository';
-import {TeamRepository} from './team.repository';
-import {ClubRepository} from './club.repository';
-import {LineUpPlayerRepository} from './line-up-player.repository';
+import { inject, Getter } from '@loopback/core';
+import { DefaultCrudRepository, repository, BelongsToAccessor, HasManyRepositoryFactory } from '@loopback/repository';
+import { DbDataSource } from '../datasources';
+import { Player, PlayerRelations, Country, PlayerPosition, Team, Club, LineUpPlayer } from '../models';
+import { CountryRepository } from './country.repository';
+import { PlayerPositionRepository } from './player-position.repository';
+import { TeamRepository } from './team.repository';
+import { ClubRepository } from './club.repository';
+import { LineUpPlayerRepository } from './line-up-player.repository';
 
 export class PlayerRepository extends DefaultCrudRepository<
   Player,
@@ -32,6 +32,9 @@ export class PlayerRepository extends DefaultCrudRepository<
     this.club = this.createBelongsToAccessorFor('club', clubRepositoryGetter,);
     this.team = this.createBelongsToAccessorFor('team', teamRepositoryGetter,);
     this.playerPosition = this.createBelongsToAccessorFor('playerPosition', playerPositionRepositoryGetter,);
+    this.registerInclusionResolver('playerPosition', this.playerPosition.inclusionResolver);
+
     this.nationality = this.createBelongsToAccessorFor('nationality', countryRepositoryGetter,);
   }
+
 }

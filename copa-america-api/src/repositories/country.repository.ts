@@ -1,12 +1,12 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, HasManyRepositoryFactory, HasOneRepositoryFactory} from '@loopback/repository';
-import {DbDataSource} from '../datasources';
-import {Country, CountryRelations, City, Referee, HostCountry, Team, Player} from '../models';
-import {CityRepository} from './city.repository';
-import {RefereeRepository} from './referee.repository';
-import {HostCountryRepository} from './host-country.repository';
-import {TeamRepository} from './team.repository';
-import {PlayerRepository} from './player.repository';
+import { inject, Getter } from '@loopback/core';
+import { DefaultCrudRepository, repository, HasManyRepositoryFactory, HasOneRepositoryFactory } from '@loopback/repository';
+import { DbDataSource } from '../datasources';
+import { Country, CountryRelations, City, Referee, HostCountry, Team, Player } from '../models';
+import { CityRepository } from './city.repository';
+import { RefereeRepository } from './referee.repository';
+import { HostCountryRepository } from './host-country.repository';
+import { TeamRepository } from './team.repository';
+import { PlayerRepository } from './player.repository';
 
 export class CountryRepository extends DefaultCrudRepository<
   Country,
@@ -30,8 +30,42 @@ export class CountryRepository extends DefaultCrudRepository<
     super(Country, dataSource);
     this.players = this.createHasManyRepositoryFactoryFor('players', playerRepositoryGetter,);
     this.team = this.createHasOneRepositoryFactoryFor('team', teamRepositoryGetter);
+    this.registerInclusionResolver('team', this.team.inclusionResolver);
+
     this.hostCountry = this.createHasOneRepositoryFactoryFor('hostCountry', hostCountryRepositoryGetter);
     this.referees = this.createHasManyRepositoryFactoryFor('referees', refereeRepositoryGetter,);
     this.cities = this.createHasManyRepositoryFactoryFor('cities', cityRepositoryGetter,);
   }
+
+
+  public async getPlayersByCountryNameTeam(countryNameTeam: string) {
+    let country = await this.find({
+      where: { name: countryNameTeam },
+      include: ['team']
+
+    })
+    return this.team(country[0].id).get({
+      include: [{
+        relation: 'players',
+      }]
+    })
+
+    // return this.find({
+    //   where: { name: countryNameTeam },
+    //   include: [{
+    //     relation: 'teams', scope: {
+    //       include: [{
+    //         relation: 'player',
+    //         // scope: {
+    //         //   include: ['country'],
+    //         // },
+    //       }],
+    //     },
+    //   }]
+
+
+    // })
+
+  }
 }
+

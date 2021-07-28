@@ -55,3 +55,4 @@ export * from './global-cup-info-group.controller';
 export * from './group-global-cup-info.controller';
 export * from './team-country.controller';
 export * from './host-country-country.controller';
+export * from './player-position.controller';
